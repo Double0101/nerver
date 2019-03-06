@@ -5,6 +5,11 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * 维护了一个List存放Message
+ * 按顺序将message写入socket
+ * 知道一条message写完 在List中删除该条message 然后推出下一条
+ */
 public class MessageWriter {
 
     private List<Message> writeQueue = new ArrayList<Message>();

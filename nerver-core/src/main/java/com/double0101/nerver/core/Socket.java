@@ -20,6 +20,11 @@ public class Socket {
         this.socketChannel = socketChannel;
     }
 
+    /*
+     * 将socketChannel中的数据读取到byteBuffer
+     * 不保证全部读取
+     * 返回读取的字节数
+     */
     public int read(ByteBuffer byteBuffer) throws IOException {
         int bytesRead = this.socketChannel.read(byteBuffer);
         int totalBytesRead = bytesRead;
@@ -35,6 +40,9 @@ public class Socket {
         return  totalBytesRead;
     }
 
+    /*
+     * 将byteBuffer中的数据写入socketChannel
+     */
     public int write(ByteBuffer byteBuffer) throws IOException {
         int bytesWritten = this.socketChannel.write(byteBuffer);
         int totalBytesWritten = bytesWritten;

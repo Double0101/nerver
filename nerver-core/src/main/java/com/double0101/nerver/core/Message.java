@@ -20,6 +20,9 @@ public class Message {
         this.messageBuffer = buffer;
     }
 
+    /*
+     * 从ByteBuffer中读到sharedArray
+     */
     public int writeToMessage(ByteBuffer byteBuffer) {
         int remaining = byteBuffer.remaining();
         while (this.length + remaining > capacity) {
@@ -35,6 +38,9 @@ public class Message {
         return bytesToCopy;
     }
 
+    /*
+     * 从byteArray读取到sharedArray
+     */
     public int writeToMessage(byte[] byteArray) {
         return writeToMessage(byteArray, 0, byteArray.length);
     }
@@ -53,6 +59,9 @@ public class Message {
         return bytesToCopy;
     }
 
+    /*
+     * 将message中的endIndex开始到length的部分复制到this.sharedArray中
+     */
     public void writePartialMessageToMessage(Message message, int endIndex) {
         int startIndexOfPartialMessage = message.offset + endIndex;
         int lengthOfPartialMessage = (message.offset + message.length) - endIndex;

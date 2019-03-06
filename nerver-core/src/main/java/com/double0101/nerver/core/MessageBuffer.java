@@ -1,5 +1,10 @@
 package com.double0101.nerver.core;
 
+/*
+ * 开辟了三个大片的数组
+ * 相当于开辟了三块内存用来存放Message
+ * capacity是每一条message占用的大小
+ */
 public class MessageBuffer {
 
     public static final int KB = 1024;

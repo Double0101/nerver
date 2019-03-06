@@ -74,6 +74,10 @@ public class SocketProcessor implements Runnable {
         writeToSockets();
     }
 
+    /*
+     * 从inboundSocketQueue中把socket导入socketMap
+     * 把socketChannel全部绑定至readSelector 等待可读
+     */
     public void takeNewSockets() throws IOException {
         Socket newSocket = this.inboundSocketQueue.poll();
 
@@ -87,13 +91,16 @@ public class SocketProcessor implements Runnable {
             newSocket.messageWriter = new MessageWriter();
 
             this.socketMap.put(newSocket.socketId, newSocket);
+            //  绑定socket和selector 等待可读
             SelectionKey key = newSocket.socketChannel.register(this.readSelector, SelectionKey.OP_READ);
             key.attach(newSocket);
 
             newSocket = this.inboundSocketQueue.poll();
         }
     }
-
+    /*
+     * 读取readSelector监听的可读状态的socketChannel
+     */
     public void readFromSockets() throws IOException {
         int readReady = this.readSelector.selectNow();
 
@@ -112,6 +119,11 @@ public class SocketProcessor implements Runnable {
         }
     }
 
+    /*
+     * 通过messageProcessor处理message中的信息
+     * 处理完后清除messages
+     * 没读完的socket留下 读完的删除并释放SelectionKey
+     */
     private void readFromSocket(SelectionKey key) throws IOException {
         Socket socket = (Socket) key.attachment();
         socket.messageReader.read(socket, this.readByteBuffer);
@@ -134,6 +146,10 @@ public class SocketProcessor implements Runnable {
         }
     }
 
+    /*
+     * writeSelector绑定非空的socket中的socketChannel
+     * 写完的socket加入nonEmptyToEmptySockets 等待下一个生命周期删除
+     */
     public void writeToSockets() throws IOException {
         takeNewOutboundMessages();
         cancelEmptySockets();
