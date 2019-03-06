@@ -13,6 +13,9 @@ public class HttpUtil {
     private static final byte[] HOST           = new byte[]{'H','o','s','t'};
     private static final byte[] CONTENT_LENGTH = new byte[]{'C','o','n','t','e','n','t','-','L','e','n','g','t','h'};
 
+    /*
+     * 将请求信息放入HttpHeaders（头部信息+body开头结尾）
+     */
     public static int parseHttpRequest(byte[] src, int startIndex, int endIndex, HttpHeaders httpHeaders) {
 
         int endOfFirstLine = findNextLineBreak(src, startIndex, endIndex);
@@ -92,6 +95,9 @@ public class HttpUtil {
         return -1;
     }
 
+    /*
+     * http请求报文中请求行与请求头部请求数据用\r\n隔开
+     */
     public static int findNextLineBreak(byte[] src, int startIndex, int endIndex) {
         for(int index = startIndex; index < endIndex; ++index){
             if(src[index] == '\n'){

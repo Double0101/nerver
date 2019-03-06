@@ -36,12 +36,24 @@ public class HttpMessageReader implements IMessageReader {
             return;
         }
         this.nextMessage.writeToMessage(byteBuffer);
+        int endIndex = HttpUtil.parseHttpRequest(this.nextMessage.sharedArray,
+                this.nextMessage.offset,
+                this.nextMessage.offset + this.nextMessage.length,
+                (HttpHeaders) this.nextMessage.metaData);
+        if (endIndex != -1) {
+            Message message = this.messageBuffer.getMessage();
+            message.metaData = new HttpHeaders();
 
+            message.writePartialMessageToMessage(nextMessage, endIndex);
 
+            completeMessages.add(nextMessage);
+            nextMessage = message;
+        }
+        byteBuffer.clear();
     }
 
     @Override
     public List<Message> getMessages() {
-        return null;
+        return this.completeMessages;
     }
 }
