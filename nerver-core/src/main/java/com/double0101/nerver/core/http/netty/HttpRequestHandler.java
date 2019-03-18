@@ -1,4 +1,4 @@
-package com.double0101.nerver.core.http;
+package com.double0101.nerver.core.http.netty;
 
 import io.netty.channel.*;
 import io.netty.handler.codec.http.*;
